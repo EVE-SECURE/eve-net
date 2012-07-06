@@ -22,6 +22,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerStatus", "Plugins\ServerStatus\ServerStatus.csproj", "{54DAC13F-661A-4BFA-9842-70C5787BBEE0}"
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CodeAnalysis - Debug|Any CPU = CodeAnalysis - Debug|Any CPU
 		CodeAnalysis - Debug|x86 = CodeAnalysis - Debug|x86
