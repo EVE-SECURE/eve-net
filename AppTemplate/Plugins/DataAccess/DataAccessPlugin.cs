@@ -41,7 +41,7 @@ namespace DataAccess
          get
          {
             string currentDB = "cru16-sqlite3-v1.db";
-            return System.IO.Path.Combine((Application.Current as IAppTemplate).Settings["pluginPath"] as string, @"DataAccess\" + currentDB);
+            return System.IO.Path.Combine((Application.Current as IAppTemplate).Settings["pluginPath"] as string, @"DataAccess\Data\" + currentDB);
          }
       }
 
@@ -163,13 +163,6 @@ namespace DataAccess
 
       private void onQuerySql(object sender, RoutedEventArgs e)
       {
-         //DockablePane dockPane = (Application.Current as IAppTemplate).RequestDockingPoint<DockablePane>(this) as DockablePane;
-
-         //DockableContent dpc = new DockableContent();
-         //dpc.Title = "Tables";
-         //dpc.Content = new TableView();
-         //dockPane.Items.Add(dpc);
-
          DocumentPane documentPane = (Application.Current as IAppTemplate).RequestDockingPoint<DocumentPane>(this) as DocumentPane;
 
          DockableContent dc = new DockableContent();
