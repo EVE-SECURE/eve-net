@@ -56,6 +56,9 @@ namespace DataAccess
       {
          get
          {
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+               return new List<string>();
+
             DataTable data = ((Application.Current as IPluginContainer).GetPlugin<DataAccessPlugin>() as DataAccessPlugin).GetDataTable(@"SELECT * FROM sqlite_master WHERE type='table'");
 
             List<String> tables = new List<string>();
