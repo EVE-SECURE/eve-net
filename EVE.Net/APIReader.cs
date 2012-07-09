@@ -374,30 +374,37 @@ namespace EVE.Net
 
       public void Query(string uri, object api_obj, string fmt, params object[] args)
       {
-         cacheFile = BuildCacheFileName(api_obj, uri, fmt, args);
-
-         string address = BuildUri(api_obj, uri, fmt, args);
-
-         XPathDocument doc = new XPathDocument(address);
-         XPathNavigator nav = doc.CreateNavigator();
-
-         XmlNamespaceManager ns = new XmlNamespaceManager(nav.NameTable);
-         XPathNodeIterator nodes = nav.Select("//result", ns);
-
          try
          {
-            while (nodes.MoveNext())
-            {
-               ParseObject(api_obj, nodes);
-            }
-         }
-         catch (Exception)
-         {
-            throw;
-         }
+            cacheFile = BuildCacheFileName(api_obj, uri, fmt, args);
 
-         if (!string.Equals(cacheFile, address))
-            SaveCacheFile(nav);
+            string address = BuildUri(api_obj, uri, fmt, args);
+
+            XPathDocument doc = new XPathDocument(address);
+            XPathNavigator nav = doc.CreateNavigator();
+
+            XmlNamespaceManager ns = new XmlNamespaceManager(nav.NameTable);
+            XPathNodeIterator nodes = nav.Select("//result", ns);
+
+            try
+            {
+               while (nodes.MoveNext())
+               {
+                  ParseObject(api_obj, nodes);
+               }
+            }
+            catch (Exception)
+            {
+               throw;
+            }
+
+            if (!string.Equals(cacheFile, address))
+               SaveCacheFile(nav);
+         }
+         catch (System.Net.WebException)
+         {
+            return;
+         }
       }
    }
 }
