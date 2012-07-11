@@ -124,27 +124,47 @@ namespace ServerStatus
          timer.Interval = TimeSpan.FromSeconds(5);
          timer.Tick += delegate
          {
-            EVE.Net.ServerStatus status = CheckServerStatus(uri);
+             using (BackgroundWorker worker = new BackgroundWorker())
+             {
+                 worker.DoWork += delegate
+                 {
+                     EVE.Net.ServerStatus status = CheckServerStatus(uri);
 
-            ImageSource currentImage = imageProperty.GetGetMethod().Invoke(this, null) as ImageSource;
+                     ImageSource currentImage = imageProperty.GetGetMethod().Invoke(this, null) as ImageSource;
 
-            if (status.serverOpen)
-            {
-               if (currentImage != _tqStatusImage || currentImage == ImageLibrary["green_image"])
-                  imageProperty.GetSetMethod().Invoke(this, new object[] {ImageLibrary["blue_image"]});
+                     if (status.serverOpen)
+                     {
+                         Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                             (DispatcherOperationCallback)delegate(object arg)
+                             {
+                                 if (currentImage != ImageLibrary["blue_image"])
+                                     imageProperty.GetSetMethod().Invoke(this, new object[] { ImageLibrary["blue_image"] });
 
-               statusProperty.GetSetMethod().Invoke(this, new object[]{string.Format("{0} is online{1}{2} players connected", 
-                  serverName, 
-                  Environment.NewLine,
-                  status.onlinePlayers)});
-            }
-            else
-            {
-               if (currentImage != _tqStatusImage || currentImage == ImageLibrary["green_image"])
-                  imageProperty.GetSetMethod().Invoke(this, new object[] {ImageLibrary["red_image"]});
+                                 statusProperty.GetSetMethod().Invoke(this, new object[]{string.Format("{0} is online{1}{2} players connected", 
+                                                              serverName, 
+                                                              Environment.NewLine,
+                                                              status.onlinePlayers)});
 
-               statusProperty.GetSetMethod().Invoke(this, new object[] {string.Format("{0} is offline", serverName)});
-            }
+                                 return null;
+                             }, null);
+                     }
+                     else
+                     {
+                         Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                             (DispatcherOperationCallback)delegate(object arg)
+                             {
+                                 if (currentImage != ImageLibrary["red_image"])
+                                     imageProperty.GetSetMethod().Invoke(this, new object[] { ImageLibrary["red_image"] });
+
+                                 statusProperty.GetSetMethod().Invoke(this, new object[] { string.Format("{0} is offline", serverName) });
+
+                                 return null;
+                             }, null);
+                     }
+                 };
+
+                 worker.RunWorkerAsync(Dispatcher);
+             }
 
             if (timer.Interval == TimeSpan.FromSeconds(5))
                timer.Interval = TimeSpan.FromMinutes(3);
