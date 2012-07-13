@@ -111,6 +111,8 @@ namespace ServerStatus
          set { _singularityStatus = value; OnPropertyChanged("SingularityStatus"); }
       }
 
+      private static object lock_ = new object();
+
       public EVEStatusBar()
       {
          _tqStatusImage = ImageLibrary["green_image"] as ImageSource;
@@ -128,7 +130,12 @@ namespace ServerStatus
              {
                  worker.DoWork += delegate
                  {
-                     EVE.Net.ServerStatus status = CheckServerStatus(uri);
+                     EVE.Net.ServerStatus status = null;
+
+                     lock (lock_)
+                     {
+                         status = CheckServerStatus(uri);
+                     }
 
                      ImageSource currentImage = imageProperty.GetGetMethod().Invoke(this, null) as ImageSource;
 
