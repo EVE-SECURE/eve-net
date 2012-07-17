@@ -15,17 +15,25 @@
 
 using System;
 using System.Data;
-using System.Diagnostics;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using AppTemplate.Interfaces;
 using AvalonDock;
+using System.Collections.Generic;
+using System.Windows.Threading;
+using System.ComponentModel;
 
 namespace DataAccess
 {
    public class DataAccessPlugin : IAppPlugin, IDBProvider
    {
+      private Settings settings = new Settings();
+
+      public System.Collections.Generic.List<EVE.Net.RefTypes.ReferenceType> ReferenceTypes
+      {
+         get { return settings.ReferenceTypes; }
+      }
+
       public string Name { get { return this.GetType().Name; } }
 
       public string SettingsFile
@@ -47,68 +55,6 @@ namespace DataAccess
 
       private SQLiteDataBase db = null;
 
-      public DataTable dbLookupShipsByRaceAndClass()
-      {
-         return db.GetDataTable(SQLQueries.SHIPS_BY_RACE_AND_CLASS);
-      }
-
-      public DataTable dbLookupTypeNamesByID(params object[] typeIDs)
-      {
-         StringBuilder sb = new StringBuilder();
-         sb.Append("SELECT typeName FROM invtypes WHERE ");
-
-         for (int x = 0; x < typeIDs.Length; x++)
-         {
-            sb.AppendFormat("typeID={0}", typeIDs[x].ToString());
-            if (x < typeIDs.Length - 1)
-               sb.Append(" OR ");
-            else
-               sb.Append(";");
-         }
-
-         return db.GetDataTable(sb.ToString());
-      }
-
-      public DataTable dbLookupTypeDetailsByID(params object[] typeIDs)
-      {
-         StringBuilder sb = new StringBuilder();
-         sb.Append("SELECT * FROM invtypes WHERE ");
-
-         for (int x = 0; x < typeIDs.Length; x++)
-         {
-            sb.AppendFormat("typeID={0}", typeIDs[x].ToString());
-            if (x < typeIDs.Length - 1)
-               sb.Append(" OR ");
-            else
-               sb.Append(";");
-         }
-
-         return db.GetDataTable(sb.ToString());
-      }
-
-      public DataTable dbLookupAllPublishedModules()
-      {
-         return db.GetDataTable(SQLQueries.ALL_PUBLISHED_MODULES);
-      }
-
-      public DataTable dbLookupBasicShipFittingDetails(params object[] typeIDs)
-      {
-         StringBuilder sb = new StringBuilder();
-         sb.Append("WHERE (");
-
-         for (int x = 0; x < typeIDs.Length; x++)
-         {
-            sb.AppendFormat("invtypes.typeID={0}", typeIDs[x].ToString());
-
-            if (x < typeIDs.Length - 1)
-               sb.Append(" OR ");
-            else
-               sb.Append(") ");
-         }
-
-         return db.GetDataTable(SQLQueries.BASIC_SHIP_FITTING, sb.ToString());
-      }
-
       public DataTable GetDataTable(string sql_query, params object[] args)
       {
          return db.GetDataTable(sql_query, args);
@@ -124,29 +70,10 @@ namespace DataAccess
          return db.ExecuteScalar(sql_query, args);
       }
 
-      private void Report(DataTable dt)
-      {
-         foreach (DataColumn col in dt.Columns)
-         {
-            Debug.Write(string.Format("{0}\t", col));
-         }
-         Debug.WriteLine("");
-
-         foreach (DataRow row in dt.Rows)
-         {
-            foreach (DataColumn col in dt.Columns)
-            {
-               Debug.Write(string.Format("{0}\t", row[col]));
-            }
-
-            Debug.WriteLine("");
-         }
-
-         Console.WriteLine("");
-      }
-
       public void Initialize()
       {
+         Settings.Load(SettingsFile, ref settings);
+
          db = new SQLiteDataBase(dbFilePath);
 
          MenuItem menu = (Application.Current as IAppTemplate).RequestDockingPoint<MenuItem>(this) as MenuItem;
@@ -159,6 +86,52 @@ namespace DataAccess
          sqlMenu.Header = "Query SQL";
          sqlMenu.Click += onQuerySql;
          pluginMenu.Items.Add(sqlMenu);
+
+         InitializeUpdaters();
+      }
+
+      public void Unload()
+      {
+         Settings.Save(SettingsFile, ref settings);
+      }
+
+      private void InitializeUpdaters()
+      {
+         DispatcherTimer refTypesTimer = new DispatcherTimer();
+
+         refTypesTimer.Interval = TimeSpan.FromSeconds(5);
+         refTypesTimer.Tick += delegate
+         {
+            refTypesTimer.Interval = TimeSpan.FromMinutes(10);
+
+            using (BackgroundWorker worker = new BackgroundWorker())
+            {
+               worker.DoWork += delegate
+               {
+                  UpdateReferenceTypes();
+               };
+
+               worker.RunWorkerAsync(Application.Current.Dispatcher);
+            }
+         };
+
+         refTypesTimer.Start();
+      }
+
+      private void UpdateReferenceTypes()
+      {
+         DateTime tmNow = DateTime.Now;
+
+         if ((tmNow - settings.TimeOfLastRefTypesUpdate).TotalDays > 0)
+         {
+            EVE.Net.RefTypes refTypes = new EVE.Net.RefTypes();
+
+            refTypes.Query();
+
+            settings.ReferenceTypes = new List<EVE.Net.RefTypes.ReferenceType>(refTypes.refTypes);
+
+            settings.TimeOfLastRefTypesUpdate = tmNow;
+         }
       }
 
       private void onQuerySql(object sender, RoutedEventArgs e)
