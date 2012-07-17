@@ -65,8 +65,6 @@ namespace AppTemplate
 
             foreach (IAppPlugin plugin in found_plugins)
             {
-               plugins.Add(plugin);
-
                plugin.Initialize();
             }
          }
@@ -99,5 +97,10 @@ namespace AppTemplate
          ThemeFactory.ChangeColors((Color)ColorConverter.ConvertFromString(((MenuItem)sender).Header.ToString()));
       }
 
+      private void onClosing(object sender, System.ComponentModel.CancelEventArgs e)
+      {
+         foreach (IAppPlugin plugin in plugins)
+            plugin.Unload();
+      }
    }
 }

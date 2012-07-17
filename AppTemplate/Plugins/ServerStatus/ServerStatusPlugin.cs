@@ -38,5 +38,7 @@ namespace ServerStatus
          EVEStatusBar sb = new EVEStatusBar();
          menu.Items.Add(sb);
       }
+
+      public void Unload() { }
    }
 }

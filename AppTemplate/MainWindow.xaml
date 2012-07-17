@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:AppTemplate"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResizeWithGrip"
+        Closing="onClosing"
         xmlns:tmp="clr-namespace:ServerStatus;assembly=ServerStatus"
         Title="EVE.Net API Test" Height="768" Width="1024">
     <Window.Resources>

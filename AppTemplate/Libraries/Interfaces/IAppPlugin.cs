@@ -20,6 +20,8 @@ namespace AppTemplate.Interfaces
    {
       string Name { get; }
       string SettingsFile { get; }
+
       void Initialize();
+      void Unload();
    }
 }

@@ -57,6 +57,11 @@ namespace Plugins.AccountManager
 
       public void SaveSettings()
       {
+         //try
+         //{
+         //   AppTemplate.Utilities.Serializer.Serialize(SettingsFile, apiKeys);
+         //}
+         //catch { }
       }
 
       public void Initialize()
@@ -77,6 +82,11 @@ namespace Plugins.AccountManager
          manageAccountsMenu.Header = "Manage Characters";
          manageAccountsMenu.Click += onManageCharacters;
          pluginMenu.Items.Add(manageAccountsMenu);
+      }
+
+      public void Unload()
+      {
+         SaveSettings();
       }
 
       private void onManageCharacters(object sender, RoutedEventArgs e)

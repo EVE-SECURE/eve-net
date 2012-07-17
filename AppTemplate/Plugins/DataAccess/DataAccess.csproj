@@ -54,6 +54,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>References\System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -77,6 +78,7 @@
     <Compile Include="QueryWindow.xaml.cs">
       <DependentUpon>QueryWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="SQLiteDataBase.cs" />
     <Compile Include="SQLQueries.cs" />
     <Compile Include="TableView.xaml.cs">
@@ -84,6 +86,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\EVE.Net\EVE.Net.csproj">
+      <Project>{B158301A-CECE-4AD0-BA16-55726FEFB7F7}</Project>
+      <Name>EVE.Net</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Interfaces\Interfaces.csproj">
       <Project>{525D3EC3-035B-40EC-8D7B-86BF46B7CAB6}</Project>
       <Name>Interfaces</Name>

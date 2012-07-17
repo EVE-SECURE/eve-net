@@ -43,6 +43,8 @@ namespace Plugins.APITest
          menu.Items.Add(pluginMenu);
       }
 
+      public void Unload() { }
+
       private void doTest(object sender, RoutedEventArgs e)
       {
          DocumentPane pane = (Application.Current as IAppTemplate).RequestDockingPoint<DocumentPane>(this) as DocumentPane;
