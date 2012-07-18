@@ -27,6 +27,7 @@ namespace EVE.Net
 
       private string cacheFile;
       private DateTime cachedTime = DateTime.MinValue;
+      private bool? isCorpKey = null;
 
       public abstract string Uri { get; }
 
@@ -39,13 +40,15 @@ namespace EVE.Net
       {
          get
          {
+            if (isCorpKey != null)
+               return isCorpKey.Value;
+
             APIKeyInfo apikey = new APIKeyInfo(keyID, vCode);
             apikey.Query();
 
-            if (!String.IsNullOrEmpty(apikey.type) && String.Compare(apikey.type, "Corporation", StringComparison.OrdinalIgnoreCase) == 0)
-               return true;
+            isCorpKey = (!String.IsNullOrEmpty(apikey.type) && String.Compare(apikey.type, "Corporation", StringComparison.OrdinalIgnoreCase) == 0);
 
-            return false;
+            return isCorpKey.Value;
          }
       }
 
