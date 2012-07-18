@@ -1,0 +1,30 @@
+﻿<Window x:Class="Plugins.AccountManager.SelectCharacterDlg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"         
+        WindowStartupLocation="CenterOwner"
+        Title="Select Character" Height="200" Width="300">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="LightGray">
+            <Label FontSize="16" HorizontalAlignment="Left"  Content="Select a character..." />
+        </Border>
+
+        <Border Grid.Row="1" Background="WhiteSmoke" Margin="0" BorderBrush="DimGray" BorderThickness="1">
+            <ComboBox x:Name="Stuff" Height="26" ItemsSource="{Binding .}" DisplayMemberPath="characterName"  Margin="8,0,8,0" 
+                      SelectedItem="{Binding Path=SelectedCharacter}" />
+        </Border>
+
+        <Border Grid.Row="2" Background="DarkGray">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Name="Submit"    Height="26" Width="60" Content="Ok" Click="onOk" Margin="0,0,8,0"/>
+                <Button Name="cancelBtn" Height="26" Width="48" Content="Cancel" IsCancel="True" Margin="0,0,18,0"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
