@@ -52,6 +52,21 @@ namespace EVE.Net
          return string.Join(".", output.ToArray());
       }
 
+      private string ComputeHash(string inputStr)
+      {
+         try
+         {
+            byte[] result = System.Security.Cryptography.MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(inputStr));
+            return new Guid(result).ToString("D");
+         }
+
+         catch (ArgumentNullException)
+         {
+            System.Diagnostics.Debug.WriteLine("Hash has not been generated.");
+            throw;
+         }
+      }
+
       private string BuildCacheFileName(object api_obj, string uri, string fmt, params object[] args)
       {
          if (!Directory.Exists(Settings.CacheFolder))
@@ -62,14 +77,12 @@ namespace EVE.Net
          if (baseName.Contains(".xml"))
             baseName = baseName.Substring(0, baseName.IndexOf('.'));
 
-         string formattedStr = ConvertFormatArgumentsToCacheString(fmt, args);
+         string argumentGuid = ComputeHash(ConvertFormatArgumentsToCacheString(fmt, args)).ToUpper();
 
-         baseName = string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}.xml",
-            Path.Combine(Settings.CacheFolder, baseName),
-            Settings.APIUri.Contains(EVEConstants.singularityAPIUri) ? ".TestServer." : "",
-            String.IsNullOrEmpty(formattedStr) ? "" : "-",
-            formattedStr);
-
+         baseName = string.Format("{0}.{1}.{2}.xml",
+            Path.Combine(Settings.CacheFolder, Settings.APIUri.Contains(EVEConstants.singularityAPIUri) ? "s" : "t"),
+            baseName,
+            argumentGuid);
 
          if (api_obj is IAPIReader)
             (api_obj as IAPIReader).CacheFile = baseName;
