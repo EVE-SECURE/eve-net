@@ -17,6 +17,9 @@ The format of cache file names has been changed.  Rather than including the enti
 This resolves an issue where certain API calls could generate cache file names that exceeded the OS filename length limits.
 
 Now caching the return of 'IsCorpKey' to reduce the number of unnecessary web requests.
+
+1.2.2 08/20/2012
+Adjusted 'roleID' in CharacterSheet.Role to be an Int64, per a post by Virppi Jouhinen (from the 'Elinor' project) where she indicated an out of range exception.
 			   
                
                
