@@ -138,7 +138,7 @@ namespace EVE.Net.Character
       {
          public Role() { }
 
-         public int roleID { get; set; }
+         public Int64 roleID { get; set; }
          public string roleName { get; set; }
       }
 
