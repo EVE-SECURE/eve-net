@@ -306,10 +306,10 @@ namespace EVE.Net
                }
                else
                {
-                  propertyXml = result.Select("//" + identifier);
+                  propertyXml = result.Select(identifier);
 
                   if (propertyXml == null || propertyXml.Count == 0)
-                     propertyXml = result.Select("//" + objectProperty.Name);
+                     propertyXml = result.Select(objectProperty.Name);
 
                   if (propertyXml == null || propertyXml.Count == 0) // object within a row ?
                   {
@@ -334,6 +334,7 @@ namespace EVE.Net
                if (propertyXml.Count > 0)
                {
                   ParseXml(api_obj, objectProperty, propertyXml);
+
                   continue;
                }
             }
