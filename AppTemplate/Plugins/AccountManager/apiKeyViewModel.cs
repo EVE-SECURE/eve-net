@@ -36,7 +36,7 @@ namespace Plugins.AccountManager
       public string Name { get { return name_; } set { name_ = (value as string).Trim(); OnPropertyChanged(() => Name); } }
       public string vCode { get { return key_.vCode; } set { key_.vCode = (value as string).Trim(); OnPropertyChanged(() => vCode); } }
       public string KeyType { get { return key_.type; } set { key_.type = value; OnPropertyChanged(() => KeyType); } }
-      public int AccessMask { get { return key_.accessMask; } set { key_.accessMask = value; OnPropertyChanged(() => AccessMask); } }
+      public UInt32 AccessMask { get { return key_.accessMask; } set { key_.accessMask = value; OnPropertyChanged(() => AccessMask); } }
       public DateTime Expires { get { return key_.expires; } set { key_.expires = value; OnPropertyChanged(() => Expires); } }
       public List<EVE.Net.APIKeyInfo.Character> Characters { get { return key_.characters; } set { key_.characters = value; OnPropertyChanged(() => Characters); } }
 
