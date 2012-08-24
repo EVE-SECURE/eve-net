@@ -53,7 +53,7 @@ namespace EVE.Net
       {
          public Call() { }
 
-         public Int64 accessMask { get; set; }
+         public UInt32 accessMask { get; set; }
          public string type { get; set; }
          public string name { get; set; }
          public int groupID { get; set; }
