@@ -65,7 +65,7 @@ namespace EVE.Net
 
       #endregion
 
-      public int accessMask { get; set; }
+      public UInt32 accessMask { get; set; }
       public string type { get; set; }
       public DateTime expires { get; set; }
 
