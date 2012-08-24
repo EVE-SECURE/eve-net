@@ -21,6 +21,9 @@ Now caching the return of 'IsCorpKey' to reduce the number of unnecessary web re
 1.2.2 08/20/2012
 Adjusted 'roleID' in CharacterSheet.Role to be an Int64, per a post by Virppi Jouhinen (from the 'Elinor' project) where she indicated an out of range exception.
 			   
+1.2.3 08/24/2012
+Updated AccessMask to uint32
+Fixed an incorrect xpath issue that was causing nested objects to not read correctly (ie: AttributeEnhancers in CharacterSheet)
                
                
 
