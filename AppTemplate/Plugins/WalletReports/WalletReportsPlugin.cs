@@ -19,6 +19,7 @@ using System.Text;
 using AppTemplate.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
+using AvalonDock;
 
 namespace WalletReports
 {
@@ -36,8 +37,32 @@ namespace WalletReports
 
         public void Initialize()
         {
-            Menu menu = (Application.Current as IAppTemplate).RequestDockingPoint<Menu>(this) as Menu;
+           MenuItem menu = (Application.Current as IAppTemplate).RequestDockingPoint<MenuItem>(this) as MenuItem;
 
+           MenuItem pluginMenu = new MenuItem();
+           pluginMenu.Header = "Corp Wallet";
+           pluginMenu.Click += doTest;
+
+           menu.Items.Add(pluginMenu);
+        }
+
+        private void doTest(object sender, RoutedEventArgs e)
+        {
+           DocumentPane pane = (Application.Current as IAppTemplate).RequestDockingPoint<DocumentPane>(this) as DocumentPane;
+
+           DockableContent dc = new DockableContent();
+           dc.Title = "Corp Wallet";
+
+           ReportsPage page = new ReportsPage();
+           dc.Content = page;
+
+           pane.Items.Add(dc);
+           dc.Focus();
+        }
+
+
+        public void Unload()
+        {
         }
     }
 }

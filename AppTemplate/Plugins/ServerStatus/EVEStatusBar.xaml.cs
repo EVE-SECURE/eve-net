@@ -121,6 +121,10 @@ namespace ServerStatus
          InitializeComponent();
       }
 
+      private void Test()
+      {
+      }
+
       private void CreateServerWatchDog(DispatcherTimer timer, string uri, string serverName, PropertyInfo imageProperty, PropertyInfo statusProperty)
       {
          timer.Interval = TimeSpan.FromSeconds(5);

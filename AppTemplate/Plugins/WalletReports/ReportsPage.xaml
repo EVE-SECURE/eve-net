@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="WalletReports.ReportsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:tk="http://schemas.microsoft.com/wpf/2008/toolkit"
+             xmlns:local="clr-namespace:WalletReports"
+             xmlns:shared="clr-namespace:AppTemplate.SharedControls;assembly=SharedControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="8"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <local:Accordion Background="LightGray" Grid.Column="0">
+            <Expander x:Name="_playerContributions" Header="Player Contributions" Expanded="onPlayerContributionsExpanded">
+                <StackPanel Orientation="Vertical">
+                    <Button Content="Top 5 Contributors"/>
+                </StackPanel>
+            </Expander>
+            <Expander x:Name="_corpPurchases" Header="Corp Purchases" Expanded="onCorpPurchasesExpanded">
+                <Grid>
+
+                </Grid>
+            </Expander>
+        </local:Accordion>
+        <shared:GridExpander Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="8" Background="#FFBCBCBC" Direction="Previous"/>
+
+    </Grid>
+</UserControl>
