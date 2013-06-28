@@ -37,9 +37,7 @@
                                FontSize="14">
 
             </av:TextEditor>
-            <tk:DataGrid Grid.Row="1" x:Name="_dataGrid" AutoGenerateColumns="True" ItemsSource="{Binding}">
-
-            </tk:DataGrid>
+            <tk:DataGrid Grid.Row="1" x:Name="_dataGrid" AutoGenerateColumns="True" ItemsSource="{Binding}" IsReadOnly="True"/>
             <StatusBar Grid.Row="2">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Rows:" VerticalAlignment="Center"/>
